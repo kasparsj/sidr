@@ -116,9 +116,6 @@
                     $html.css('overflow-x', 'hidden').scrollTop(scrollTop);
                 }
 
-                console.log(speed);
-                console.log(bodyAnimation);
-
                 // Open menu
                 if (displace) {
                     $body.addClass('sidr-animating').css({
