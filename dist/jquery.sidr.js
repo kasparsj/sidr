@@ -62,8 +62,10 @@
                 speed = $menu.data('speed'),
                 side = $menu.data('side'),
                 displace = $menu.data('displace'),
-                onOpen = $menu.data('onOpen'),
-                onClose = $menu.data('onClose'),
+                beforeOpen = $menu.data('beforeOpen'),
+                beforeClose = $menu.data('beforeClose'),
+                afterOpen = $menu.data('afterOpen'),
+                afterClose = $menu.data('afterClose'),
                 bodyAnimation,
                 menuAnimation,
                 scrollTop,
@@ -94,14 +96,15 @@
                     if (typeof callback === 'function') {
                         callback(name);
                     }
+                    afterOpen();
                 });
 
                 $(window).on('resize.sidr', function(event) {
                     doOpen(0);
                 });
 
-                // onOpen callback
-                onOpen();
+                // beforeOpen callback
+                beforeOpen();
             }
 
             function doOpen(speed, callback) {
@@ -164,12 +167,13 @@
                     if (typeof callback === 'function') {
                         callback(name);
                     }
+                    afterClose();
                 });
 
                 $(window).off('resize.sidr');
 
-                // onClose callback
-                onClose();
+                // beforeClose callback
+                beforeClose();
             }
 
             function doClose(callback) {
@@ -251,10 +255,14 @@
             renaming: true,           // The ids and classes will be prepended with a prefix when loading existent content
             body: 'body',         // Page container selector,
             displace: true, // Displace the body content or not
-            onOpen: function () {
+            beforeOpen: function () {
             },  // Callback when sidr opened
-            onClose: function () {
-            }   // Callback when sidr closed
+            beforeClose: function () {
+            },   // Callback when sidr closed
+            afterOpen: function() {
+            },
+            afterClose: function() {
+            }
         }, options);
 
         var name = settings.name,
@@ -276,8 +284,10 @@
                 side: settings.side,
                 body: settings.body,
                 displace: settings.displace,
-                onOpen: settings.onOpen,
-                onClose: settings.onClose
+                beforeOpen: settings.beforeOpen,
+                beforeClose: settings.beforeClose,
+                afterOpen: settings.afterOpen,
+                afterClose: settings.afterClose
             });
 
         // The menu content
