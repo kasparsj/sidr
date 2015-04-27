@@ -57,6 +57,7 @@
 
             // Declaring
             var $menu = $('#' + name),
+                menuWidth = $menu.outerWidth(true),
                 $body = $($menu.data('body')),
                 $html = $('html'),
                 speed = $menu.data('speed'),
@@ -89,7 +90,7 @@
                 // Lock sidr
                 sidrMoving = true;
 
-                doOpen(speed, function () {
+                doOpen(function () {
                     sidrMoving = false;
                     sidrOpened = name;
                     // Callback
@@ -99,17 +100,18 @@
                     afterOpen();
                 });
 
-                $(window).on('resize.sidr', function(event) {
-                    doOpen(0);
+                $(window).on('resize.sidr', function() {
+                    if (displace && sidrOpened && !sidrMoving) {
+                        menuWidth = $menu.outerWidth(true);
+                        $body.css(side, menuWidth + 'px');
+                    }
                 });
 
                 // beforeOpen callback
                 beforeOpen();
             }
 
-            function doOpen(speed, callback) {
-                var menuWidth = $menu.outerWidth(true);
-
+            function doOpen(callback) {
                 // Left or right?
                 if (side === 'left') {
                     bodyAnimation = {left: menuWidth + 'px'};
@@ -177,8 +179,6 @@
             }
 
             function doClose(callback) {
-                var menuWidth = $menu.outerWidth(true);
-
                 // Right or left menu?
                 if (side === 'left') {
                     bodyAnimation = {left: 0};
