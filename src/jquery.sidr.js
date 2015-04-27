@@ -87,9 +87,16 @@
                 // Lock sidr
                 sidrMoving = true;
 
-                doOpen(speed, callback);
+                doOpen(speed, function () {
+                    sidrMoving = false;
+                    sidrOpened = name;
+                    // Callback
+                    if (typeof callback === 'function') {
+                        callback(name);
+                    }
+                });
 
-                $(window).on('resize.sidr', function() {
+                $(window).on('resize.sidr', function(event) {
                     doOpen(0);
                 });
 
@@ -130,10 +137,7 @@
                         $(this).addClass(bodyClass);
                     }, speed);
                 }
-                $menu.css('display', 'block').animate(menuAnimation, speed, function () {
-                    sidrMoving = false;
-                    sidrOpened = name;
-                    // Callback
+                $menu.css('display', 'block').animate(menuAnimation, speed, function() {
                     if (typeof callback === 'function') {
                         callback(name);
                     }
@@ -150,7 +154,17 @@
                 // Lock sidr
                 sidrMoving = true;
 
-                doClose(callback);
+                doClose(function () {
+                    $menu.removeAttr('style').hide();
+                    $body.removeAttr('style');
+                    $('html').removeAttr('style');
+                    sidrMoving = false;
+                    sidrOpened = false;
+                    // Callback
+                    if (typeof callback === 'function') {
+                        callback(name);
+                    }
+                });
 
                 $(window).off('resize.sidr');
 
@@ -177,13 +191,7 @@
                     $html.removeAttr('style').scrollTop(scrollTop);
                 }
                 $body.addClass('sidr-animating').animate(bodyAnimation, speed).removeClass(bodyClass);
-                $menu.animate(menuAnimation, speed, function () {
-                    $menu.removeAttr('style').hide();
-                    $body.removeAttr('style');
-                    $('html').removeAttr('style');
-                    sidrMoving = false;
-                    sidrOpened = false;
-                    // Callback
+                $menu.animate(menuAnimation, speed, function() {
                     if (typeof callback === 'function') {
                         callback(name);
                     }
